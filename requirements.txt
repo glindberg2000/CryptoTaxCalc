@@ -1,0 +1,29 @@
+# Core data processing
+pandas>=2.0.0
+numpy>=1.24.0
+
+# API integration and web scraping
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+
+# Blockchain integration (minimal use)
+web3>=6.0.0
+
+# Reporting and visualization
+matplotlib>=3.7.0
+reportlab>=4.0.0
+
+# Development and testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.5.0
+
+# Documentation
+sphinx>=7.0.0
+sphinx-rtd-theme>=1.3.0
+
+# Utilities
+python-dateutil>=2.8.0
+pytz>=2023.3 
