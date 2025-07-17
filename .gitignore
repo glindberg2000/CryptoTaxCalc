@@ -182,6 +182,16 @@ data/user_*.csv
 data/transactions_*.csv
 data/holdings_*.json
 
+# User data directories - CRITICAL: Never commit real user data
+data/*/
+data/*/*.csv
+data/*/*.json
+data/*/*.xlsx
+data/*/*.xls
+data/2Blue/
+data/real/
+data/users/
+
 # Database files - Never commit databases with user data
 *.db
 *.sqlite
