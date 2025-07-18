@@ -11,12 +11,12 @@ from typing import Dict, List, Any
 
 @pytest.fixture
 def sample_csv_data() -> str:
-    """Sample CSV transaction data for testing."""
-    return """Type,Date,BuyAmount,BuyCurrency,SellAmount,SellCurrency,USDEquivalent,TxID
-Buy,2024-01-15,1.5,ETH,0,USD,3000.00,tx_001
-Sell,2024-02-20,0.5,ETH,1000,USD,1000.00,tx_002
-Receive,2024-03-10,100,USDC,0,USD,100.00,tx_003
-Swap,2024-04-05,0.1,ETH,200,USDC,200.00,tx_004"""
+    """Sample CSV transaction data for testing (15-column format)."""
+    return """Type,BuyAmount,BuyCurrency,SellAmount,SellCurrency,FeeAmount,FeeCurrency,Exchange,ExchangeId,Group,Import,Comment,Date,USDEquivalent,UpdatedAt
+Trade,1.5,ETH,0,USD,0.01,ETH,test,tx001,group1,import1,comment1,2024-01-15,3000.00,2024-01-15T12:00:00Z
+Trade,0,USD,0.5,ETH,0.005,ETH,test,tx002,group1,import1,comment2,2024-02-20,1000.00,2024-02-20T12:00:00Z
+Income,100,USDC,0,USD,0,USD,test,tx003,group1,import1,comment3,2024-03-10,100.00,2024-03-10T12:00:00Z
+Trade,200,USDC,0.1,ETH,0.001,ETH,test,tx004,group1,import1,comment4,2024-04-05,200.00,2024-04-05T12:00:00Z"""
 
 
 @pytest.fixture

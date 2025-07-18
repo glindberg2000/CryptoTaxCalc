@@ -9,22 +9,18 @@ __version__ = "0.1.0"
 __author__ = "CryptoTaxCalc Team"
 __email__ = "contact@cryptotaxcalc.com"
 
-# Core modules
+# Core modules (import only existing modules)
 from . import parser
-from . import fifo_manager
-from . import fmv_fetcher
-from . import tax_calculator
-from . import reporter
-from . import database
-from . import utils
 
-# Public API
+# Public API (only include existing modules)
 __all__ = [
     "parser",
-    "fifo_manager",
-    "fmv_fetcher",
-    "tax_calculator",
-    "reporter",
-    "database",
-    "utils",
 ]
+
+# Future imports will be added as modules are implemented:
+# from . import fifo_manager
+# from . import fmv_fetcher  
+# from . import tax_calculator
+# from . import reporter
+# from . import database
+# from . import utils
