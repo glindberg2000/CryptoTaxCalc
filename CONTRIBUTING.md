@@ -252,7 +252,7 @@ Screenshots, mockups, use cases
 ## 📞 Getting Help
 
 ### Resources
-- **Documentation**: Check `cline_docs/` and `README.md`
+- **Documentation**: Check `README.md` and `PRDs/CryptoTaxApp.md`
 - **Issues**: Search existing issues
 - **Discussions**: Use GitHub Discussions
 - **Wiki**: Check project wiki (if available)
