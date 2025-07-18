@@ -1,10 +1,10 @@
 # CryptoTaxCalc Product Requirements Document (PRD)
 
 ## 1. Document Information
-- **Version:** 1.0
+- **Version:** 1.1
 - **Date:** July 17, 2025
-- **Author:** Grok 4 (xAI)
-- **Status:** Draft (Ready for Hand-Off to Development Team)
+- **Author:** Grok 4 (xAI), Updated by ManagerAI
+- **Status:** Approved for Development
 - **Purpose:** This PRD expands on the initial summary provided, incorporating detailed specifications for functionality, architecture, team structure, and implementation considerations. The previous summary was high-level and suitable as a starting point, but this full-featured PRD is designed to be comprehensive enough for direct hand-off to an AI development team, enabling iterative development without further clarification.
 
 ## 2. Product Overview
@@ -43,51 +43,70 @@ Key differentiators:
 
 ## 5. Key Features
 ### 5.1 Core Processing
-- Parse CSV transactions chronologically for 2024.
-- Build/update FIFO queues per asset, incorporating pre-2024 holdings (from user-provided JSON/CSV).
-- Match disposals (sells, swaps, withdrawals) to acquisitions for gain/loss calculation.
+- Parse CSV transactions chronologically for 2024 (15-column format with enhanced validation).
+- Build/update FIFO queues per asset, incorporating pre-2024 holdings (from user-provided CSV/JSON).
+- Import pre-2024 FIFO state from year-end reports; validate totals match holdings data.
+- Match disposals to acquisitions using FIFO for gain/loss calculation.
 - Classify gains: Short-term (hold <365 days) vs. long-term.
-- Handle special cases:
-  - Income events (e.g., staking rewards, airdrops): $0 basis, ordinary income.
-  - Swaps: Treat as sell of one asset and buy of another at FMV.
-  - LP events: Calculate FMV of added/removed tokens.
-  - Deposits/Withdrawals: Track as non-taxable transfers unless involving fiat.
+
+**Transaction Type Mapping (IRS-Compliant):**
+- **Deposit**: Non-taxable if internal transfer; taxable as income if received as payment/reward
+- **Withdrawal**: Non-taxable transfer; taxable disposal if to third party or for fiat/goods
+- **Trade**: Standard buy/sell with FIFO lot matching for capital gains/losses
+- **Spend**: Taxable disposal at FMV (treat as sale)
+- **Income/Staking/Airdrop**: Ordinary income at FMV on receipt, $0 cost basis
+- **Lost**: Deductible as capital loss if proven (theft); otherwise flag for user review
+- **Borrow/Repay**: Non-taxable; track interest as potential income/expense if applicable
 
 ### 5.2 Filtering and Validation
 - Spam filtering: Exclude zero-value tx, flagged keywords (e.g., "spam", "airdrop scam"), or user-defined patterns.
-- Data validation: Flag incomplete rows, truncated data, or inconsistencies (e.g., negative amounts).
-- Edge cases: Dust rounding (e.g., <0.0001 units as zero), multi-chain tx IDs.
+- **Enhanced Data Quality Rules:**
+  - Missing USDEquivalent/FMV: Fetch from fallback APIs; flag and estimate if unavailable
+  - Dust Amounts: Round/ignore below $0.01 USD equivalent to avoid noise
+  - Negative Quantities: Flag as errors; halt processing and notify user for correction
+- Edge cases: Multi-chain tx IDs, date format variations.
+- Add 2024 date filter: Process only transactions within 2024 tax year.
+- Multi-chain filtering: Process all supported chains but log chain-specific nuances.
 
 ### 5.3 FMV Handling
 - Primary: Fetch historical USD FMVs from blockchain explorers (e.g., Etherscan API for ETH tx timestamps).
 - Fallback: CoinGecko historical API or web scraping for non-supported chains.
 - Cache FMVs locally to avoid repeated queries.
 
-### 5.4 Outputs
+### 5.4 Fee Handling
+- **Fee Integration**: Add fees to cost basis for acquisitions; subtract from proceeds for disposals
+- **Currency Conversion**: Convert FeeAmount in FeeCurrency to USD at transaction FMV
+- **Tax Treatment**: Do not deduct separately as business expenses (investor focus)
+- **Multi-Currency Support**: Handle fees in different currencies from main transaction
+
+### 5.5 Outputs
 - Tables: Gains/losses by date/asset (qty, proceeds, basis, gain/loss, term).
 - Summaries: Total short/long-term gains, ordinary income, unrealized holdings.
 - Exports: CSV, JSON, PDF (with IRS-formatted reports).
 - Visuals: Charts for gain distribution (using Matplotlib).
 
-### 5.5 Extensibility
+### 5.6 Extensibility
 - Modular parser: Importable as `cryptotaxcalc.parser` for GUI integrations (e.g., Streamlit app).
 - Batch mode: CLI command like `python -m cryptotaxcalc --input tx.csv --output report.json`.
 
 ## 6. Functional Requirements
 - **Input Requirements:**
-  - Raw CSV (as provided in sample: columns like Type, BuyAmount, BuyCurrency, etc.).
-  - Pre-2024 holdings file (JSON: {asset: [{date, qty, basis}]} for FIFO queues).
+  - Enhanced CSV format (15 columns): Type, BuyAmount, BuyCurrency, SellAmount, SellCurrency, FeeAmount, FeeCurrency, Exchange, ExchangeId, Group, Import, Comment, Date, USDEquivalent, UpdatedAt
+  - Pre-2024 FIFO state (CSV: from year-end report 2023) and Holdings data (CSV: asset quantities and values)
+  - 2024 date filtering: Process only transactions with Date in 2024 tax year
 
-- **Processing Flow:**
-  1. Load and clean CSV (Pandas DataFrame).
-  2. Sort by Date.
-  3. Initialize FIFO queues from pre-2024 data.
-  4. Iterate transactions:
-     - Acquisitions: Add to FIFO with FMV basis.
-     - Disposals: Match to oldest lots; calculate gain.
-     - Income: Log separately.
-  5. Fetch FMVs as needed.
-  6. Generate reports.
+- **Enhanced Processing Flow:**
+  1. Load and validate 15-column CSV (Pandas DataFrame).
+  2. Apply 2024 date filter and data quality checks.
+  3. Sort by Date chronologically.
+  4. Import and validate pre-2024 FIFO queues from year-end data.
+  5. Iterate 2024 transactions with enhanced type mapping:
+     - Acquisitions: Add to FIFO with FMV basis (including fees).
+     - Disposals: Match to oldest lots; calculate gain (subtracting fees).
+     - Income: Log as ordinary income with $0 basis.
+     - Complex types: Handle per IRS mapping rules.
+  6. Fetch missing FMVs from APIs with fallback.
+  7. Generate comprehensive reports with fee integration.
 
 - **Error Handling:**
   - Graceful failures: Log issues (e.g., missing FMV) and continue with estimates.
@@ -169,11 +188,14 @@ Key differentiators:
 - **Deployment:** Local script/package; future PyPI upload.
 
 ## 11. Development Roadmap
-- **Phase 1 (1-2 weeks):** Core parser module, FIFO logic, CSV parsing.
+- **Phase 1A (2 days):** Enhanced CSV parser, 2024 filter, basic validation.
+- **Phase 1B (3 days):** FIFO integration with 2023 data, queue reconstruction.
+- **Phase 1C (3 days):** Complex transaction handlers, fee processing.
 - **Phase 2 (1 week):** FMV fetching, DB integration.
 - **Phase 3 (1 week):** Reporting, CLI batch job.
 - **Phase 4 (1 week):** Testing, GUI prototype.
 - **Phase 5:** Beta release, human feedback.
+- **Target MVP CLI:** 2 weeks from start (July 25, 2025).
 
 ## 12. Risks and Mitigations
 - **Risk:** Inaccurate FMVs → Mitigation: Multi-source fallbacks, user overrides.
