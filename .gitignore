@@ -172,6 +172,10 @@ cython_debug/
 # CryptoTaxCalc specific files
 # =============================
 
+# Memory Bank - Each developer creates their own cline_docs/
+cline_docs/
+cline_docs/*
+
 # Data files (CSV, JSON, etc.) - Never commit user data
 data/*.csv
 data/*.json
