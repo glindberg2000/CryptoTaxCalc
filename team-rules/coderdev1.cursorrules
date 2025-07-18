@@ -1,0 +1,208 @@
+# Coder Dev 1 - CryptoTaxCalc Development Rules
+
+## Role: Coder Dev 1
+**Current Assignment**: FIFO integration implementation
+**Branch**: feature/fifo-integration
+**Deadline**: July 20, 2025
+**Effort**: 8 points
+
+## Current Focus
+- Implement FIFO queue loading from 2023 year-end data
+- Build deques per asset, validate totals against holdings
+- Integrate with parser output from Phase 1A
+- Include unit tests for queue reconstruction and edge cases
+
+## 🤖 AI Agent Memory System
+
+### Memory Bank Documentation (CRITICAL)
+This project uses a Memory Bank system to maintain context across AI agent sessions. **ALWAYS** follow these rules:
+
+#### Required Memory Bank Files
+```
+cline_docs/
+├── productContext.md      # Why this project exists, problems it solves
+├── activeContext.md       # Current work status, recent changes, next steps
+├── systemPatterns.md      # How system is built, key technical decisions
+├── techContext.md         # Technologies used, development setup
+└── progress.md           # What works, what's left to build, progress status
+```
+
+#### Memory Bank Workflow
+1. **Before Starting Work**: Read ALL Memory Bank files to understand context
+2. **During Development**: Follow established patterns and decisions
+3. **After Significant Changes**: Update relevant Memory Bank files
+4. **Never Proceed Without Context**: If Memory Bank files are missing, create them first
+5. **Privacy**: Memory Bank files are private per developer - never commit to git
+
+#### Memory Bank Updates
+- Update `activeContext.md` with current work status
+- Update `progress.md` when completing tasks or phases
+- Update `systemPatterns.md` when making architectural decisions
+- Update `techContext.md` when changing technologies or setup
+
+## Discord Bot Usage
+
+- For all Discord interactions (e.g., sending messages, fetching data), exclusively use the `mcp_discord-manager_*` tools
+- Server ID: `1395578178973597799`
+- Primary channels: `#general` (1395578179531309089), `#onboarding` (1395879896344956998)
+- Always prefix Discord prompts with the bot name, e.g., "mcp_discord-manager_send_message"
+- This project uses discord-manager for all Discord communications
+
+## Development Guidelines
+
+### Project Structure
+```
+CryptoTaxApp/                    # Repository folder name
+├── cryptotaxcalc/              # Main Python package
+├── tests/                      # Test suite
+├── data/                       # Sample data & test files
+├── docs/                       # Documentation
+├── PRDs/                       # Product Requirements
+├── .cursorrules.md             # Development guidelines
+├── requirements.txt            # Dependencies
+└── cline_docs/                 # Memory Bank (PRIVATE - not in git)
+    ├── productContext.md       # Why this project exists
+    ├── activeContext.md        # Current work status
+    ├── systemPatterns.md       # Architecture decisions
+    ├── techContext.md          # Technologies & setup
+    └── progress.md             # What's built vs what's left
+```
+
+### Code Quality Standards
+- **Type Hints**: Optional but recommended for clarity
+- **Documentation**: Docstrings for all public methods
+- **Testing**: >80% coverage for new code, 100% for critical modules
+- **Error Handling**: Comprehensive exception handling with graceful degradation
+- **Performance**: <5 minutes for 5,000 transactions processing
+
+### Git Workflow
+- **Repository**: `git@github.com:glindberg2000/CryptoTaxCalc.git`
+- **Branching**: Use feature branches (e.g., `feature/fifo-integration`)
+- **Commits**: Descriptive commit messages with context
+- **Reviews**: Code reviews required before merge to main
+- **Testing**: Test changes before pushing to avoid breaking the system
+- **Memory Bank**: NEVER commit `cline_docs/` folder (private per developer)
+
+### Technology Stack
+- **Language**: Python 3.12.3
+- **Database**: SQLite (embedded, no server setup)
+- **Testing**: Pytest with coverage reporting
+- **Architecture**: Modular package design with clear separation of concerns
+
+### Current Project Status
+- **Phase**: 1B - FIFO Integration (25% complete)
+- **Target MVP**: July 25, 2025
+- **Last Milestone**: Phase 1A completed ahead of schedule
+
+### Team Coordination
+- **Daily Updates**: EOD progress reports in Discord
+- **Communication**: Primary coordination via Discord channels
+- **Documentation**: Memory Bank as source of truth
+- **Handoffs**: Clear documentation and review process
+
+### Key Files for New Developers
+1. **PRD** (`PRDs/CryptoTaxApp.md`) - Detailed specifications (READ FIRST)
+2. **This File** (`.cursorrules.md`) - Development guidelines
+3. **Requirements** (`requirements.txt`) - Dependencies
+4. **Discord Channels** - Current status and team coordination
+5. **Your Own Memory Bank** (`cline_docs/`) - Create after reading above
+
+### Error Handling Strategy
+- **Graceful Degradation**: Continue processing when possible
+- **User Notification**: Clear error messages and suggestions
+- **Logging**: Comprehensive logging for debugging and audit
+- **Fallbacks**: Multiple data sources and processing strategies
+
+### Security & Privacy
+- **Local Processing**: All sensitive data processed locally
+- **No Cloud Uploads**: Unless explicitly consented by user
+- **Data Privacy**: No transmission of personal financial data
+- **Audit Trail**: Maintain processing logs for compliance
+
+### Performance Requirements
+- **Processing Speed**: <5 minutes for 5,000 transactions
+- **Memory Usage**: Efficient handling of 10,000+ transaction datasets
+- **Scalability**: Single-user focus, no multi-tenant requirements
+- **Response Time**: CLI commands complete within reasonable timeframes
+
+### Testing Strategy
+- **Unit Tests**: Individual component testing
+- **Integration Tests**: End-to-end workflow testing
+- **Sample Data Tests**: Real-world CSV processing validation
+- **Performance Tests**: Large dataset processing validation
+
+### Documentation Standards
+- **API Documentation**: Clear method signatures and examples
+- **User Guide**: Step-by-step instructions for end users
+- **Development Guide**: Setup and contribution guidelines
+- **Memory Bank**: Context preservation for AI agents
+
+## Emergency Procedures
+
+### If Memory Bank Files Are Missing
+1. **STOP** all development work
+2. **Read** PRD (`PRDs/CryptoTaxApp.md`) for project context
+3. **Check** Discord channels for current status
+4. **Create** all required Memory Bank files based on your understanding
+5. **Document** current state before proceeding
+
+### If Discord Communication Fails
+1. **Continue** development work locally
+2. **Document** progress in Memory Bank files
+3. **Resume** communication when available
+4. **Update** team with progress
+
+### If Build/Test Failures Occur
+1. **Investigate** root cause thoroughly
+2. **Fix** issues before pushing changes
+3. **Test** changes locally first
+4. **Document** fixes in Memory Bank
+
+## Success Metrics
+
+### Phase Completion Criteria
+- **Phase 1A**: ✅ COMPLETED (CSV parser, validation, 100% test coverage)
+- **Phase 1B**: FIFO integration, queue reconstruction, unit tests
+- **Phase 1C**: Tax logic, fee handlers, advanced validation
+- **Phase 2**: FMV fetching, database integration
+- **Phase 3**: Reporting, CLI interface
+- **Phase 4**: Testing, GUI prototype
+- **Phase 5**: Beta release, user feedback
+
+### Quality Gates
+- **Test Coverage**: >80% minimum, 100% for critical modules
+- **Performance**: <5 minutes for 5,000 transactions
+- **Accuracy**: 95% accuracy in sample tax calculations
+- **User Experience**: Net Promoter Score >8/10 in beta testing
+
+## Personal Responsibilities
+
+### Current Tasks (July 18-20, 2025)
+1. **FIFO Queue Implementation** - Collections.deque for per-asset management
+2. **2023 Data Import** - Load FIFO_year_end_report_2023.csv and Holdings_year_end_report_2023.csv
+3. **Queue Reconstruction** - Build deques per asset, validate totals against holdings
+4. **Integration** - Connect with parser output from Phase 1A
+5. **Unit Tests** - Queue reconstruction and edge cases (zero/negative quantities)
+6. **Code Review** - Review with FullStackDev before merge
+
+### Key Dependencies
+- **Phase 1A Parser** - Completed by FullStackDev (feature/core-parser branch)
+- **2023 Year-End Data** - FIFO_year_end_report_2023.csv and Holdings_year_end_report_2023.csv
+- **Integration Points** - Parser output format and validation
+
+### Technical Focus Areas
+- **Collections.deque** implementation for FIFO queues
+- **Data validation** and reconciliation between files
+- **Edge case handling** (zero quantities, negative amounts)
+- **Integration testing** with parser module
+- **Performance optimization** for large datasets
+
+### Team Handoff Protocol
+- **Code Review**: FullStackDev to review before merge
+- **Documentation**: Update Memory Bank with implementation details
+- **Discord Update**: Post completion status and integration notes
+- **Knowledge Transfer**: Brief Coder Dev 2 on FIFO integration points
+
+---
+
+**Remember**: The Memory Bank system is the foundation of this project. Always maintain it as if your functionality depends on it - because it does! 
