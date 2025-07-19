@@ -1,0 +1,5 @@
+Type,BuyAmount,BuyCurrency,SellAmount,SellCurrency,FeeAmount,FeeCurrency,Exchange,ExchangeId,Group,Import,Comment,Date,USDEquivalent,UpdatedAt
+Trade,0.0,ETH,1.0,BTC,0.0005,BTC,Binance,,,,,2024-02-20,,2024-02-20 14:45:00
+Withdrawal,0.0,BTC,5.0,ETH,0.01,ETH,Coinbase,,,,,2024-04-05,,2024-04-05 16:20:00
+Income,0.0,USDC,0.0,,0.0,,Airdrop,,,,,2024-05-12,,2024-05-12 11:00:00
+Trade,0.5,ADA,0.0,,0.001,ADA,Binance,,,,,2024-07-01,,2024-07-01 08:30:00
